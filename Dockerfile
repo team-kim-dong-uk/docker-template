@@ -1,25 +1,22 @@
-FROM openjdk:11-jre-slim AS builder
+FROM openjdk:11 AS builder
 #FROM openjdk:11 AS builder
 
-WORKDIR spring
-ARG JAR_FILE=build/libs/demo*.jar
-COPY ${JAR_FILE} spring.jar
+
+ARG JAR_FILE=build/libs/*.jar
+#COPY ${JAR_FILE} spring.jar
 
 #COPY ./build/libs/demo-0.0.1-SNAPSHOT.jar ./demo.jar
 
-#COPY gradlew .
-#COPY gradle gradle
-#COPY build.gradle .
-#COPY settings.gradle .
-#COPY src src
+COPY gradlew .
+COPY gradle gradle
+COPY build.gradle .
+COPY settings.gradle .
+COPY src src
+RUN chmod +x ./gradlew
+RUN ./gradlew bootjar --debug --stacktrace > gradle.log
 
-
-
-#RUN chmod +x ./gradlew 
-#RUN ./gradlew bootJar 
-
-#FROM openjdk:11
-#COPY --from=builder build/libs/*.jar app.jar
-
+FROM openjdk:11-jre-slim
+COPY --from=builder ${JAR_FILE} /stage/spring.jar
+WORKDIR stage
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","spring.jar"]
