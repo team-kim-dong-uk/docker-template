@@ -7,7 +7,7 @@ stages:
   - deploy
 
 build:
-  image: openjdk:11-jre-slim
+  image: openjdk:8
   stage: build jar
   before_script:
     - source .${CI_COMMIT_REF_NAME}.env
