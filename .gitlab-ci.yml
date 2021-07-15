@@ -12,7 +12,7 @@ build:
   before_script:
     - source .${CI_COMMIT_REF_NAME}.env
   script:
-    - ./gradlew bootJar -Dspring.profiles.active=$SPRING_ACTIVE_PROFILE
+    - ./gradlew bootJar -Dspring.profiles.active=$SPRING_ACTIVE_PROFILE --stacktrace
   artifacts:
     paths:
       - build/libs/*.jar
