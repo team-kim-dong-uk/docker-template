@@ -39,13 +39,13 @@ deploy:
   before_script:
     - 'which ssh-agent || (apt-get update -y && apt-get install openssh-client -y)'
     - eval $(ssh-agent -s)
-    - echo "$SERVER_SSH_KEY" | tr -d '\r' | ssh-add -
+    - echo "$ENV_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
     - source .${CI_COMMIT_REF_NAME}.env
   script:
-    - ssh root@$SERVER_IP "docker stop $APP_NAME;
+    - ssh root@$DEPLOY_SERVER "docker stop $APP_NAME;
       docker system prune -a -f;
       docker pull $DOCKER_REPO;
       docker container run -d --name $APP_NAME -p $PORT:8080 -e SPRING_PROFILES_ACTIVE=$SPRING_ACTIVE_PROFILE $DOCKER_REPO"
