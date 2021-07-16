@@ -43,7 +43,7 @@ deploy:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - source .${CI_COMMIT_RFF_NAME}.env
+    - source .${CI_COMMIT_REF_NAME}.env
   script:
     - ssh root@$DEPLOY_SERVER "docker stop $APP_NAME;
       docker system prune -a -f;
