@@ -13,6 +13,7 @@ build:
     - source .${CI_COMMIT_REF_NAME}.env
   script:
     - ./gradlew tasks --info
+    - rm -rf .gradle
     - ./gradlew bootJar -Dspring.profiles.active=$SPRING_ACTIVE_PROFILE
   artifacts:
     paths:
