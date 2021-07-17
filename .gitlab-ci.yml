@@ -7,11 +7,12 @@ stages:
   - deploy
 
 build:
-  image: openjdk:8
+  image: openjdk:11
   stage: build jar
   before_script:
     - source .${CI_COMMIT_REF_NAME}.env
   script:
+    - ./gradlew tasks --info
     - ./gradlew bootJar -Dspring.profiles.active=$SPRING_ACTIVE_PROFILE
   artifacts:
     paths:
