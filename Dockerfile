@@ -1,4 +1,4 @@
-FROM openjdk:8 AS builder
+FROM openjdk:11 AS builder
 # build
 ARG SPRING_ACTIVE_PROFILE
 
@@ -17,8 +17,8 @@ ARG JAR_FILE=build/libs/*.jar
 COPY ${JAR_FILE} spring.jar
 RUN java -Djarmode=layertools -jar spring.jar extract
 
-#FROM openjdk:11-jre-slim
-FROM openjdk:8-alpine
+FROM openjdk:11-jre-slim
+#FROM openjdk:8-alpine
 WORKDIR application
 ENV port 8080
 
