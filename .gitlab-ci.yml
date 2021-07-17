@@ -7,7 +7,7 @@ stages:
   - deploy
 
 build:
-  image: openjdk:11
+  image: openjdk:11-jre-slim
   stage: build jar
   before_script:
     - source .${CI_COMMIT_REF_NAME}.env
@@ -31,8 +31,8 @@ docker build:
     - docker build --platform linux/amd64 --build-arg SRPING_ACTIVE_PROFILE=$SRPING_ACTIVE_PROFILE -t $DOCKER_REPO .
     - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD docker.io
     - docker push $DOCKER_REPO
-  tags:
-    - build-docker
+  #tags:
+    #- build-docker
 
 deploy:
   image: ubuntu:latest
