@@ -8,7 +8,8 @@ stages:
 
 build:
   #image: openjdk:11-jre-slim
-  image: gradle:5.3.0-jdk-alpine
+  #image: gradle:5.3.0-jdk-alpine
+  image: gradle:7.1.1-jdk11
   stage: build jar
   before_script:
     - source .${CI_COMMIT_REF_NAME}.env
