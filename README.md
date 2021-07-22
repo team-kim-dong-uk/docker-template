@@ -1,4 +1,4 @@
-# docker-template
+# How to build docker 
 
 docker, nginx, .... dummy project
 
@@ -38,3 +38,9 @@ docker pull rimeilo324/docker-spring-test:0.0.1
 # docker pull {Docker hub id}/{repo}:{tag}
 ```
 
+
+# CI/CD - EC2
+
+
+
+# CI/CD - ECS
