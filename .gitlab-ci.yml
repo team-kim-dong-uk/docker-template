@@ -7,13 +7,16 @@ stages:
   - deploy
 
 build:
-  image: openjdk:11
+  #image: openjdk:11-jre-slim
+  #image: gradle:5.3.0-jdk-alpine
+  image: gradle:7.1.1-jdk11
   stage: build jar
   before_script:
     - source .${CI_COMMIT_REF_NAME}.env
   script:
-    - ./gradlew tasks --info
-    - ./gradlew bootJar -Dspring.profiles.active=$SPRING_ACTIVE_PROFILE
+    #- ./gradlew tasks --info
+    - rm -rf .gradle
+    - ./gradlew bootJar -Dspring.profiles.active=$SPRING_ACTIVE_PROFILE --stacktrace
   artifacts:
     paths:
       - build/libs/*.jar
@@ -31,8 +34,8 @@ docker build:
     - docker build --platform linux/amd64 --build-arg SRPING_ACTIVE_PROFILE=$SRPING_ACTIVE_PROFILE -t $DOCKER_REPO .
     - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD docker.io
     - docker push $DOCKER_REPO
-  tags:
-    - build-docker
+  #tags:
+    #- build-docker
 
 deploy:
   image: ubuntu:latest
@@ -46,7 +49,8 @@ deploy:
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
     - source .${CI_COMMIT_REF_NAME}.env
   script:
-    - ssh ec2-user@$DEPLOY_SERVER "docker stop $APP_NAME;
+    - ssh ec2-user@$DEPLOY_SERVER "sudo systemctl start docker;
+      docker stop $APP_NAME;
       docker system prune -a -f;
       docker pull $DOCKER_REPO;
       docker container run -d --name $APP_NAME -p $PORT:8080 -e SPRING_PROFILES_ACTIVE=$SPRING_ACTIVE_PROFILE $DOCKER_REPO"
