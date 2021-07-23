@@ -35,7 +35,8 @@ docker build:
   stage: build and push docker image
   #stage: build job
   before_script:
-    - source .${CI_COMMIT_REF_NAME}.env
+    #- source .${CI_COMMIT_REF_NAME}.env
+    - source .dev.env
   script:
     - docker build --platform linux/amd64 --build-arg SRPING_ACTIVE_PROFILE=$SRPING_ACTIVE_PROFILE -t $AWS_ECR_REPO:latest .
     #- docker login -u $DOCKER_USER -p $DOCKER_PASSWORD docker.io
