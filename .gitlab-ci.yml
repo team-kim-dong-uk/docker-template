@@ -1,5 +1,15 @@
+image: docker:stable
 services:
   - docker:stable-dind
+
+before_script:
+  - apk add --no-cache curl jq python py-pip
+  - pip install awscli
+  - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+  - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+  - aws configure set region $AWS_DEFAULT_REGION
+  - $(aws ecr get-login --no-include-email --region "${AWS_DEFAULT_REGION}")
+#  - IMAGE_TAG="$(echo $CI_COMMIT_SHA | head -c 8)"
 
 #include:
 #  - template: AWS/Deploy-ECS.gitlab-ci.yml
@@ -43,8 +53,7 @@ docker build:
     - docker push $AWS_ECR_REPO:latest
   #tags:
     #- build-docker
-  only:
-    - dev
+
 
 deploy:
   #image: ubuntu:latest
@@ -52,10 +61,7 @@ deploy:
   stage: deploy
     #- echo "$ENV_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     #- source .${CI_COMMIT_REF_NAME}.env
-  before_script:
-    - aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $$AWS_ECR_REPO
-    - docker build --platform linux/amd64 --build-arg SRPING_ACTIVE_PROFILE=$SRPING_ACTIVE_PROFILE -t $AWS_ECR_REPO:latest .
-    - docker push $AWS_ECR_REPO:latest
+  
   script:
     - aws ecs register-task-definition --cli-input-json file://./t-d-1.json
     - aws ecs update-service --region "$AWS_DEFAULT_REGION" --cluster "$CI_AWS_ECS_CLUSTER" --service "$CI_AWS_SERVICE_NAME"  --task-definition "$CI_AWS_ECS_TASK_DEFINITION"
