@@ -32,7 +32,7 @@ docker build:
     DOCKER_TLS_CERTDIR: "/certs"
 
   #stage: build and push docker image
-  stage: build job
+  stage: build
   before_script:
     - source .${CI_COMMIT_REF_NAME}.env
   script:
