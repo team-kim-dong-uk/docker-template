@@ -17,6 +17,7 @@ before_script:
 stages:
   - build jar
   - build and push docker image
+  - ecr
   - deploy
 
 build:
@@ -53,6 +54,22 @@ docker build:
     - docker push $AWS_ECR_REPO:latest
   #tags:
     #- build-docker
+  only:
+    - dev
+
+ecr:
+  stage: ecr
+
+  before_script:
+    #- source .${CI_COMMIT_REF_NAME}.env
+    - source .dev.env
+  script:
+    - docker build --platform linux/amd64 --build-arg SRPING_ACTIVE_PROFILE=$SRPING_ACTIVE_PROFILE -t $AWS_ECR_REPO:latest .
+    #- docker login -u $DOCKER_USER -p $DOCKER_PASSWORD docker.io
+    - docker push $AWS_ECR_REPO:latest
+  only:
+    - ecs-master
+
 
 
 deploy:
@@ -61,7 +78,7 @@ deploy:
   stage: deploy
     #- echo "$ENV_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     #- source .${CI_COMMIT_REF_NAME}.env
-  
+
   script:
     - aws ecs register-task-definition --cli-input-json file://./t-d-1.json
     - aws ecs update-service --region "$AWS_DEFAULT_REGION" --cluster "$CI_AWS_ECS_CLUSTER" --service "$CI_AWS_SERVICE_NAME"  --task-definition "$CI_AWS_ECS_TASK_DEFINITION"
