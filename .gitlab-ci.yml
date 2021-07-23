@@ -6,7 +6,7 @@ include:
 
 stages:
   #- build jar
-  - build and push docker image
+  #- build and push docker image
   - deploy
 
 build:
@@ -31,7 +31,8 @@ docker build:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: "/certs"
 
-  stage: build and push docker image
+  #stage: build and push docker image
+  stage: build job
   before_script:
     - source .${CI_COMMIT_REF_NAME}.env
   script:
