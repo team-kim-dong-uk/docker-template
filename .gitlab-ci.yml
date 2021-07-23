@@ -5,7 +5,7 @@ include:
   - template: AWS/Deploy-ECS.gitlab-ci.yml
 
 stages:
-  - build jar
+  #- build jar
   - build and push docker image
   - deploy
 
@@ -13,7 +13,8 @@ build:
   #image: openjdk:11-jre-slim
   #image: gradle:5.3.0-jdk-alpine
   image: gradle:7.1.1-jdk11
-  stage: build jar
+  #stage: build jar
+  stage: build_artifact job
   before_script:
     - source .${CI_COMMIT_REF_NAME}.env
   script:
