@@ -1,0 +1,20 @@
+{
+  "family": "ecs-test",
+  "networkMode": "bridge",
+  "containerDefinitions": [
+    {
+      "name": "docker-test", 
+      "essential": true,
+      "image": "332391327485.dkr.ecr.ap-northeast-2.amazonaws.com/test-repo:latest",
+      "cpu": 0,
+      "memory": 128,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 8080,
+          "protocol": "tcp"
+        }
+      ]
+    }
+  ]
+}
