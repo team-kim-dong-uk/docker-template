@@ -24,7 +24,8 @@ public class HiController {
         }
         else {
             String ip = local.getHostAddress();
-            return "Hi! server is "+ ip ;
+            String hostName = local.getHostName();
+            return "Hi! server is "+ ip + "host name = " + hostName;
         }
 
     }
