@@ -46,13 +46,14 @@ docker build:
     DOCKER_TLS_CERTDIR: "/certs"
 
   stage: build and push docker image
+  image: rimeilo324/aws-docker:0.0.1
   #stage: build job
   before_script:
     #- source .${CI_COMMIT_REF_NAME}.env
     - source .dev.env
-    - apk add --update --no-cache curl jq py-pip
+    #- apk add --update --no-cache curl jq py-pip
     #- apk add --no-cache curl jq python py3-pip
-    - pip3 install awscli
+    #- pip3 install awscli
     - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
     - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
     - aws configure set region $AWS_DEFAULT_REGION

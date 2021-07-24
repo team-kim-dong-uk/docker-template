@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class HiController {
     @GetMapping()
     public String hi(){
-        return "Hi~UPDATE!!";
+        return "Hi~UPDATE22222!!";
     }
 }
