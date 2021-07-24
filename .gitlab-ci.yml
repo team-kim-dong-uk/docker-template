@@ -3,13 +3,13 @@ image: docker:stable
 services:
   - docker:stable-dind
 
-before_script:
-  - apk add --no-cache curl jq python py3-pip
-  - pip3 install awscli
-  - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-  - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-  - aws configure set region $AWS_DEFAULT_REGION
-  - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ECR_REPO
+#before_script:
+ # - apk add --no-cache curl jq python py3-pip
+ # - pip3 install awscli
+ # - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+  # - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+  #- aws configure set region $AWS_DEFAULT_REGION
+  #- aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ECR_REPO
   #- $(aws ecr get-login --no-include-email --region "${AWS_DEFAULT_REGION}")
   #- IMAGE_TAG="$(echo $CI_COMMIT_SHA | head -c 8)"
 
@@ -50,6 +50,12 @@ docker build:
   before_script:
     #- source .${CI_COMMIT_REF_NAME}.env
     - source .dev.env
+    - apk add --no-cache curl jq python py3-pip
+    - pip3 install awscli
+    - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+    - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+    - aws configure set region $AWS_DEFAULT_REGION
+    - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ECR_REPO
 
   script:
     - docker build --platform linux/amd64 --build-arg SRPING_ACTIVE_PROFILE=$SRPING_ACTIVE_PROFILE -t $AWS_ECR_REPO:latest .
