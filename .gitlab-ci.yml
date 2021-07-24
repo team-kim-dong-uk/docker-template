@@ -1,4 +1,4 @@
-image: docker:latest
+image: docker:stable
 
 services:
   - docker:stable-dind
@@ -11,7 +11,7 @@ before_script:
   - aws configure set region $AWS_DEFAULT_REGION
   - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ECR_REPO
   #- $(aws ecr get-login --no-include-email --region "${AWS_DEFAULT_REGION}")
-#  - IMAGE_TAG="$(echo $CI_COMMIT_SHA | head -c 8)"
+  #- IMAGE_TAG="$(echo $CI_COMMIT_SHA | head -c 8)"
 
 #include:
 #  - template: AWS/Deploy-ECS.gitlab-ci.yml
@@ -40,7 +40,7 @@ build:
       - build/libs/*.jar
 
 docker build:
-  image: docker:stable
+  #image: docker:stable
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: "/certs"
@@ -54,7 +54,7 @@ docker build:
   script:
     - docker build --platform linux/amd64 --build-arg SRPING_ACTIVE_PROFILE=$SRPING_ACTIVE_PROFILE -t $AWS_ECR_REPO:latest .
     #- docker login -u $DOCKER_USER -p $DOCKER_PASSWORD docker.io
-    #- docker push $AWS_ECR_REPO:latest
+    - docker push $AWS_ECR_REPO:latest
   #tags:
     #- build-docker
 
@@ -70,7 +70,7 @@ ecr:
     #- docker login -u $DOCKER_USER -p $DOCKER_PASSWORD docker.io
     - docker push $AWS_ECR_REPO:latest
   only:
-    - ecs-master
+    - dev
 
 
 
