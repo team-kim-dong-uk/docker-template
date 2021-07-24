@@ -1,4 +1,5 @@
-image: docker:stable
+#image: docker:stable
+image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
 services:
   - docker:stable-dind
 
