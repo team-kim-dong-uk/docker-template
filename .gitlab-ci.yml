@@ -1,4 +1,4 @@
-image: docker:stable
+image: docker:latest
 
 services:
   - docker:stable-dind
@@ -61,12 +61,9 @@ docker build:
 
 ecr:
   stage: ecr
-
-  before_script:
-
+  #before_script:
     #- source .${CI_COMMIT_REF_NAME}.env
-    - source .dev.env
-
+    #- source .dev.env
   script:
     - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ECR_REPO
     #- docker build --platform linux/amd64 --build-arg SRPING_ACTIVE_PROFILE=$SRPING_ACTIVE_PROFILE -t $AWS_ECR_REPO:latest .
